@@ -5,8 +5,8 @@ LIBS= -lsfml-graphics -lsfml-window -lsfml-system
 OBJ= main.o mmi.o hero.o fundations.o foe.o
 
 # Executable(s)
-main: $(OBJ)
-	$(CC) $(OPT) $(CFLAGS) $(OBJ) -o main $(LIBS)
+exe: $(OBJ)
+	$(CC) $(OPT) $(CFLAGS) $(OBJ) -o exe $(LIBS)
 
 
 # Objet(s)
@@ -27,4 +27,4 @@ foe.o: foe.h foe.cpp fundations.h
 
 # Cleaner
 clean:
-	rm *.o main
+	rm *.o exe
