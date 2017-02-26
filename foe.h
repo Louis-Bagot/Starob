@@ -2,6 +2,7 @@
 #define FOE_DEFINE
 #include <cstdlib>
 #include <cmath>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -23,10 +24,8 @@ private:
   position m_origin; // origin position
   position m_delta; // handle whether x and y should go right or left
   float m_slope; // slope of the line foe will follow
-  int m_edge; // the edge the object popped up at. 'll be useful for advance
-  bool m_first; // first iteration checker. 'll be useful for advance too
   // pop variable(s)
-  static const float popSlowFactor; // factor to slow down the generation of Foe
+  static const float popFactor; // factor to slow down the generation of Foe
   // console display
   char m_char; // console display
   // SFML
@@ -36,7 +35,7 @@ private:
 
 public:
   // Constructor(s), Destructor
-  Foe(const Hero perso);
+  Foe(const Hero &perso);
   ~Foe();
 
   // gets
@@ -52,6 +51,7 @@ public:
   int collision(Hero &perso); // return options: 0: not; 1: border; 2: shield; 3: perso
 
   static int manage1Foe(Foe &opp,Hero &perso);
+  static bool generator(const int &loop); // returns true if a foe must be summoned
   static void manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe);
 };
 

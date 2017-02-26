@@ -11,7 +11,7 @@ void initField(char field[FX][FY]){
   }
 }
 
-void updateField(char field[FX][FY], const Hero perso, const std::vector<Foe*> vFoe){
+void updateField(char field[FX][FY], const Hero &perso, const std::vector<Foe*> &vFoe){
   initField(field);
   for (size_t i = 0; i < vFoe.size(); i++) {
     field[vFoe[i]->getPos().x][vFoe[i]->getPos().y]=vFoe[i]->getChar();
@@ -32,7 +32,7 @@ void displayFieldConsole(char const field[FX][FY]){
 
 }
 
-void displayLife(const Hero perso){
+void displayLife(const Hero &perso){
   for (size_t i = 0; i < (unsigned)perso.getLife(); i++) {
     std::cout << "|";
   }

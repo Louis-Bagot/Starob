@@ -11,6 +11,9 @@ Hero::Hero() {
   // position & directions
   m_pos.x=FX/2;
   m_pos.y=FY/2;
+  m_spritesize=1;
+  m_posShield.x=m_pos.x;
+  m_posShield.y=m_pos.y+m_spritesize;
   m_dirShield=RIGHT;
   m_limit=1;
   // console display
@@ -18,7 +21,6 @@ Hero::Hero() {
   m_charShield=')';
   // SFML
   m_image="sprites/hero.jpg";
-  m_spritesize=1;
 
 }
 
@@ -109,8 +111,8 @@ void Hero::manageMovement(){
 
 }
 
-bool Hero::dead(Hero perso) {
-  return (perso.getLife()==0);
+bool Hero::dead() {
+  return (m_life==0);
 }
 
 

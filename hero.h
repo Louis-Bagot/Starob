@@ -50,10 +50,10 @@ public:
   void takeDamage(const int damage);
   void manageShield();
   void manageMovement();
+  bool dead();
 
 
   // statics
-  static bool dead(const Hero perso);
   static direction getQZSD();
   static direction getLUDR();
 

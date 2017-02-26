@@ -31,6 +31,7 @@ int main () {
 
   // main loop
   do {
+    elapsed = clock.restart();
     loop++;
 
     arob.manageShield();
@@ -50,12 +51,13 @@ int main () {
     }
     displayFieldConsole(field);
     displayLife(arob);
+    std::cout << "loop:" << loop << std::endl;
     end=abortGame();
 
     elapsed=clock.getElapsedTime();
     if (clock.getElapsedTime().asMilliseconds()<100)
               usleep(100000-elapsed.asMilliseconds());
-  } while(!Hero::dead(arob)&&(!end));
+  } while(!arob.dead()&&(!end));
 
 // testSFML();
 

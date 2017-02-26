@@ -1,15 +1,15 @@
 #include "foe.h"
 
 using namespace std;
-const float Foe::popSlowFactor=0.001; /// AAaH a global variable /o/ run4urLaif
+const float Foe::popFactor=1; /// AAaH a global variable /o/ run4urLaif
 
 
 position Foe::randomFoePos(){ //initial random position generator (for Constructor)
-  position randPos;
+  position randPos; // pop to return
+  int redge(rand()%4); // random edge to pop to
+  // pairing edges with integers: let 0:UP, 1:DOWN; 2:LEFT, 3:RIGHT
 
-  m_edge=rand()%4; // We want Foe to pop on the side.
-                   //let 0&1 be U&D and 2&3 be L&R
-  switch (m_edge) {
+  switch (redge) {
     case 0:
       randPos.x=0;
       break;
@@ -23,10 +23,10 @@ position Foe::randomFoePos(){ //initial random position generator (for Construct
       randPos.y=FY-1;
       break;
   }
-  if (m_edge>1) // we are either L or R, need an x
-    randPos.x=rand()%(FX-1) +1; // we dodge dead corner positions
+  if (redge>1) // we are either L or R, need an x
+    randPos.x=rand()%FX;
   else
-    randPos.y=rand()%(FY-1) +1;
+    randPos.y=rand()%FY;
 
   return randPos;
 
@@ -34,7 +34,7 @@ position Foe::randomFoePos(){ //initial random position generator (for Construct
 
 
 // Constructor using m_target based on Hero position
-Foe::Foe(const Hero perso) {
+Foe::Foe(const Hero &perso) {
   m_attack=1;
   m_speed=1;
   m_pos=randomFoePos(); // initialalizes m_edge too
@@ -54,7 +54,6 @@ Foe::Foe(const Hero perso) {
 
   // slope formula:
   m_slope=(perso.getPos().y-m_pos.y)/float(perso.getPos().x-m_pos.x);
-  m_first=true;
   // SFML
   m_char='o';
   m_image="foe.jpg";
@@ -68,41 +67,24 @@ char Foe::getChar() const{return m_char;}
 std::string Foe::getImage() const{return m_image;}
 
 void Foe::advance(){
-  if (m_first) {
-    m_first=false;
-    switch (m_edge) {
-      case 0:
-        m_pos.x+=m_speed;
-        break;
-      case 1:
-        m_pos.x-=m_speed;
-        break;
-      case 2:
-        m_pos.y+=m_speed;
-        break;
-      case 3:
-        m_pos.y-=m_speed;
-        break;
-    }
-  } else {
-    if (abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x)-m_slope)<abs((m_origin.y-m_pos.y)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)) {
-      m_pos.y+=m_delta.y*m_speed;
-    } else m_pos.x+=m_delta.x*m_speed;
-  }
 
+  if (abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x)-m_slope)<abs((m_origin.y-m_pos.y)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)) {
+    m_pos.y+=m_delta.y*m_speed;
+  } else
+    m_pos.x+=m_delta.x*m_speed;
 }
 
 int Foe::collision(Hero &perso){
   int res;
 
-  if ((m_pos.x==FX-1)||(m_pos.x==0)||(m_pos.y==FY-1)||(m_pos.y==0))
+  if ((m_pos.x>=FX)||(m_pos.x<=-1)||(m_pos.y>=FY)||(m_pos.y<=-1)) // if we get out of field
     res=1;
   else if (m_pos==perso.getPosShield()) {
     res=2;
   } else if (m_pos==perso.getPos()) {
     res=3;
   }
-
+  std::cout << "hit " << res << std::endl;
   return res;
 }
 
@@ -116,14 +98,17 @@ int Foe::manage1Foe(Foe &opp, Hero &perso){
   return hit;
 }
 
+bool Foe::generator(const int &loop){
+  return (floor(sqrt(loop-1))<floor(sqrt(loop)));
+}
+
 void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe) {
   bool del=false; // will check if you have deleted the current explored foe
-//?  std::vector<Foe*> vFoe;
 
   // generation of foes
-  for (size_t i = 0; i < Foe::popSlowFactor*sqrt(loop)+1; i++) {
+  if (Foe::generator(loop)) // if foe generator deems generation necessary
     vFoe.push_back(new Foe(perso));
-  }
+
 
   for (size_t i=0; i<vFoe.size(); i++) {
     do {
