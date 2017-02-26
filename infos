@@ -1,0 +1,14 @@
+size of board 13*75 for console display
+
+  Console design of hero, shield:
+
+	Positions L & R:
+
+	         (@   @)
+
+	Positions U & D:
+
+		  ⁀   @
+		  @   ‿ 
+
+
