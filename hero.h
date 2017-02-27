@@ -23,7 +23,9 @@ private:
   // console display
   char m_char;
   char m_charShield;
-  // SFML
+  // SFML // !!! We assumed so far that the sprite is a square.
+          // If it must be done rectangular, create "position m_sizesprite",
+          // and put .x .y everywhere needed.
   std::string m_image;
   int m_spritesize;
 

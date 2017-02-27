@@ -1,7 +1,8 @@
 #include "foe.h"
 
 using namespace std;
-const float Foe::popFactor=1; /// AAaH a global variable /o/ run4urLaif
+const int Foe::constantPop=100; // Foes will pop constantly after that much loops
+const float Foe::foesPerLoop=1/1.; /// 1/Number of foe popping per loop
 int Foe::counter=0;
 
 position Foe::randomFoePos(){ //initial random position generator (for Constructor)
@@ -60,7 +61,7 @@ Foe::Foe(const Hero &perso) {
   m_char='o';
   m_image="foe.jpg";
 }
-Foe::~Foe(){std::cout << "Foe destructed" << std::endl;}
+Foe::~Foe(){}
 
 int Foe::getAttack()const { return m_attack;}
 int Foe::getSpeed()const { return m_speed;}
@@ -86,8 +87,6 @@ int Foe::collision(Hero &perso){
   } else if (m_pos==perso.getPos()) {
     hit=3;
   }
-  std::cout << "hit " << hit << std::endl;
-  getState();
   return hit;
 }
 
@@ -101,9 +100,20 @@ int Foe::manage1Foe(Foe &opp, Hero &perso){
   return hit;
 }
 
+bool Foe::generator(const int &loop) {return (loop%(int)floor(1/Foe::foesPerLoop)==0);}
+
+/* A POSSIBLE GENERATOR - TO TWEAK
 bool Foe::generator(const int &loop){
-  return (floor(sqrt(loop-1))<floor(sqrt(loop)));
+    // square fonction a parameter (f(x)=ax²)
+    double a(Foe::foesPerLoop/(2*Foe::constantPop));
+    // const b of tangent equation p(x-m)+b with slope p=f'(m), b=am²
+    double b(a*Foe::constantPop*Foe::constantPop);
+
+    // bool deciding of generation
+    if (loop<Foe::constantPop) return (floor((loop*loop*a))>(floor((loop-1)*(loop-1)*a)));
+    else return ((floor(Foe::foesPerLoop*(loop-Foe::constantPop)+b))>(floor((Foe::foesPerLoop*(loop-1-Foe::constantPop)+b))));
 }
+*/
 
 void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe) {
   bool del=false; // will check if you have deleted the current explored foe
@@ -114,7 +124,6 @@ void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe) {
     vFoe.push_back(new Foe(perso));
   }
 
-
   for (size_t i=0; i<vFoe.size(); i++) {
     do {
       del=(manage1Foe(*vFoe[i], perso)>0); // here foe moves and deals damage
@@ -123,7 +132,7 @@ void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe) {
           delete(vFoe[i]);
           vFoe[i]=vFoe[vFoe.size()-1];
           vFoe[vFoe.size()-1]=0;
-        }
+        } else del=false; // if it was the last, don't check again
         delete(vFoe[vFoe.size()-1]);
         vFoe.pop_back();
       }
@@ -132,7 +141,7 @@ void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe) {
 }
 
 void Foe::getState(){
-  std::cout << "Ori (" << m_origin.x <<","<< m_origin.y<<") ";
-  std::cout << "Pos (" << m_pos.x <<","<< m_pos.y<<")";
-  std::cout << " number: " << m_number << std::endl;
+  std::cout << "Origin (" << m_origin.x <<","<< m_origin.y<<"), ";
+  std::cout << "Position (" << m_pos.x <<","<< m_pos.y<<"), ";
+  std::cout << "Pop number: " << m_number << ", " ;
 }

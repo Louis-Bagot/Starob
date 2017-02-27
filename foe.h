@@ -25,9 +25,10 @@ private:
   position m_delta; // handle whether x and y should go right or left
   float m_slope; // slope of the line foe will follow
   // pop variable(s)
-  static const float popFactor; // factor to slow down the generation of Foe
+  static const int constantPop; // number of loops after which Foes pop constantly
+  static const float foesPerLoop; // number of loops after which Foes pop constantly
 
-  static int counter; // nb of Foes created
+  static int counter; // nb of Foes created so far
   int m_number; // n° of creation
   // console display
   char m_char; // console display

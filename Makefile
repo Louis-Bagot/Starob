@@ -1,5 +1,5 @@
 CC=g++
-OPT=-g -std=c++11 
+OPT=-g -std=c++11 -lglut
 CFLAGS= -Wall -Wextra -Wreorder
 LIBS= -lsfml-graphics -lsfml-window -lsfml-system
 OBJ= main.o mmi.o hero.o fundations.o foe.o

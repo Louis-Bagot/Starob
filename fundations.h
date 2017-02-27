@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <time.h>
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
-#define FX 13
-#define FY 75
+#define FX 55
+#define FY 100
 #define FMAX max(FX,FY)
 
 

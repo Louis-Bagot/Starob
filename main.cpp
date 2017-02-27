@@ -11,7 +11,7 @@
 #include "hero.h"
 #include "foe.h"
 #include "mmi.h"
-using namespace std; 
+using namespace std;
 
 int main () {
 //: Time, random initialization
@@ -59,7 +59,7 @@ int main () {
               usleep(100000-elapsed.asMilliseconds());
   } while(!arob.dead()&&(!end));
 
-// testSFML();
+  // testSFML();
 
 
 return 0;

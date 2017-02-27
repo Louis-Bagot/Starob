@@ -20,7 +20,7 @@ Hero::Hero() {
   m_char='@';
   m_charShield=')';
   // SFML
-  m_image="sprites/hero.jpg";
+  m_image="sprites/starob.png";
 
 }
 
@@ -43,7 +43,7 @@ int Hero::getSpriteSize() const {return m_spritesize;}
 // hero handling
 
 bool Hero::validPos(const position pos) const {
-  return ((pos.x>=m_limit)&&(pos.x<=FX-1-m_limit)&&(pos.y>=m_limit)&&(pos.y<=FY-1-m_limit));
+  return ((pos.x>=m_limit)&&(pos.x<=FX-1-m_limit-m_spritesize)&&(pos.y>=m_limit)&&(pos.y<=FY-1-m_limit-m_spritesize));
 }
 
 void Hero::takeDamage(const int damage){

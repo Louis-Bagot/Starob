@@ -43,32 +43,60 @@ bool abortGame(){
   return ((sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))||(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)));
 }
 
-void testSFML() {
-    sf::Clock clock;
-    sf::RenderWindow window(sf::VideoMode(1920, 1200), "Tests SFML");
-    sf::Texture texture;
-    sf::Event event;
-    sf::Sprite sprite;
-    window.setFramerateLimit(60);
-    // run the program as long as the window is open
+
+void debug() {
+  sf::RenderWindow window(sf::VideoMode(1920, 1200), "");
+  sf::Texture textureFond;
+  if (!textureFond.loadFromFile("sprites/fond.jpg")){}
+  while (window.isOpen()) window.close();
+}
+
+void testSFML(){
+  // wtf debug: (load texture before you load if for real)
+debug();
+
+  sf::Clock clock;
+  // window
+       sf::RenderWindow window(sf::VideoMode(1920, 1080), "Starob");
+       // texture definition & load
+       sf::Texture textureFond;
+       string nomTextureFond("sprites/fond.jpg");
+       if (!textureFond.loadFromFile(nomTextureFond))
+       {
+               // error...
+       }
+       // sprite definition & load
+       sf::Sprite spriteFond;
+       spriteFond.setTexture(textureFond);
+       spriteFond.setScale(sf::Vector2f(1.f, 1080/1200.f)); // absolute scale factor
+
+       // Hero
+       sf::Texture textureHero;
+       string nomTextureHero("sprites/starob.png");
+       if (!textureHero.loadFromFile(nomTextureHero)){std::cout << "Error loading file: Hero." << std::endl;}
+       textureHero.setSmooth(true);
+       sf::Sprite spriteHero;
+       spriteHero.setPosition(sf::Vector2f((1920-128)/2, (1200-128)/2)); // absolute position
+       spriteHero.setTexture(textureHero);
+
+
+
+       sf::Event event;
+       window.setFramerateLimit(60);
+
+       // main loop
     while (window.isOpen())
     {
-        // check all the window's events that were triggered since the last iteration of the loop
-        while (window.pollEvent(event))
-        {
-            // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-        window.clear(sf::Color::Black);
-        if (!texture.loadFromFile("sprites/texture.jpg"))
-          {
-            //  cout >> "Error" >> endl;
-          }
+               while (window.pollEvent(event))
+               {
+                       if (event.type == sf::Event::Closed)
+                       window.close();
+               }
 
+       window.clear(sf::Color::Black);
+       window.draw(spriteFond);
+       window.draw(spriteHero);
+       window.display();
 
-        sprite.setTexture(texture);
-        window.draw(sprite);
-        window.display();
     }
 }
