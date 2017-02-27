@@ -11,7 +11,7 @@
 #include "hero.h"
 #include "foe.h"
 #include "mmi.h"
-using namespace std;
+using namespace std; 
 
 int main () {
 //: Time, random initialization

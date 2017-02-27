@@ -26,6 +26,9 @@ private:
   float m_slope; // slope of the line foe will follow
   // pop variable(s)
   static const float popFactor; // factor to slow down the generation of Foe
+
+  static int counter; // nb of Foes created
+  int m_number; // n° of creation
   // console display
   char m_char; // console display
   // SFML

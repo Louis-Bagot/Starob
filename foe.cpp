@@ -2,7 +2,7 @@
 
 using namespace std;
 const float Foe::popFactor=1; /// AAaH a global variable /o/ run4urLaif
-
+int Foe::counter=0;
 
 position Foe::randomFoePos(){ //initial random position generator (for Constructor)
   position randPos; // pop to return
@@ -54,6 +54,8 @@ Foe::Foe(const Hero &perso) {
 
   // slope formula:
   m_slope=(perso.getPos().y-m_pos.y)/float(perso.getPos().x-m_pos.x);
+
+  m_number=counter;
   // SFML
   m_char='o';
   m_image="foe.jpg";
@@ -75,17 +77,18 @@ void Foe::advance(){
 }
 
 int Foe::collision(Hero &perso){
-  int res;
+  int hit;
 
   if ((m_pos.x>=FX)||(m_pos.x<=-1)||(m_pos.y>=FY)||(m_pos.y<=-1)) // if we get out of field
-    res=1;
+    hit=1;
   else if (m_pos==perso.getPosShield()) {
-    res=2;
+    hit=2;
   } else if (m_pos==perso.getPos()) {
-    res=3;
+    hit=3;
   }
-  std::cout << "hit " << res << std::endl;
-  return res;
+  std::cout << "hit " << hit << std::endl;
+  getState();
+  return hit;
 }
 
 int Foe::manage1Foe(Foe &opp, Hero &perso){
@@ -106,8 +109,10 @@ void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe) {
   bool del=false; // will check if you have deleted the current explored foe
 
   // generation of foes
-  if (Foe::generator(loop)) // if foe generator deems generation necessary
+  if (Foe::generator(loop)) {// if foe generator deems generation necessary
+    counter++;
     vFoe.push_back(new Foe(perso));
+  }
 
 
   for (size_t i=0; i<vFoe.size(); i++) {
@@ -117,6 +122,7 @@ void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe) {
         if (i<vFoe.size()-1){
           delete(vFoe[i]);
           vFoe[i]=vFoe[vFoe.size()-1];
+          vFoe[vFoe.size()-1]=0;
         }
         delete(vFoe[vFoe.size()-1]);
         vFoe.pop_back();
@@ -126,7 +132,7 @@ void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe) {
 }
 
 void Foe::getState(){
-  std::cout << "Ori (" << m_origin.x <<","<< m_origin.y<<")" << std::endl;
-  std::cout << "Pos (" << m_pos.x <<","<< m_pos.y<<")" << std::endl;
-  std::cout << "Slope: " << m_slope << std::endl;
+  std::cout << "Ori (" << m_origin.x <<","<< m_origin.y<<") ";
+  std::cout << "Pos (" << m_pos.x <<","<< m_pos.y<<")";
+  std::cout << " number: " << m_number << std::endl;
 }
