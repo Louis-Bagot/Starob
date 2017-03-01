@@ -68,6 +68,7 @@ int Foe::getSpeed()const { return m_speed;}
 position Foe::getPos() const{return m_pos;}
 char Foe::getChar() const{return m_char;}
 std::string Foe::getImage() const{return m_image;}
+sf::Sprite Foe::getSprite() const {return m_sprite;}
 
 void Foe::advance(){
 
@@ -140,7 +141,7 @@ void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe) {
   }
 }
 
-void Foe::getState(){
+void Foe::getState() const{
   std::cout << "Origin (" << m_origin.x <<","<< m_origin.y<<"), ";
   std::cout << "Position (" << m_pos.x <<","<< m_pos.y<<"), ";
   std::cout << "Pop number: " << m_number << ", " ;

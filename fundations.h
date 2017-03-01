@@ -8,9 +8,9 @@
 #include <stdlib.h>
 #include <time.h>
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
-#define FX 55
-#define FY 100
-#define FMAX max(FX,FY)
+#define FX 1080
+#define FY 1920
+#define FMAX MAX(FX,FY)
 
 
 
@@ -21,6 +21,6 @@ typedef struct position {
 
 enum direction {RIGHT,LEFT,UP,DOWN};
 
-bool operator==(const position& pos1, const position& pos2);
+bool operator==(const position &pos1, const position &pos2);
 
 #endif //FUNDATIONS_DEFINE

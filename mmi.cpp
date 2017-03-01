@@ -46,9 +46,23 @@ bool abortGame(){
 
 void debug() {
   sf::RenderWindow window(sf::VideoMode(1920, 1200), "");
-  sf::Texture textureFond;
-  if (!textureFond.loadFromFile("sprites/fond.jpg")){}
+
+  sf::Texture textureBG;
+  if (!textureBG.loadFromFile("sprites/background.jpg")){}
+  sf::Texture textureHero;
+  if (!textureHero.loadFromFile("sprites/starob.png")){}
+
   while (window.isOpen()) window.close();
+}
+
+sf::Sprite sBackground(){
+  sf::Texture textureBG;
+  sf::Sprite spriteBG;
+  string nameBGtexture("sprites/background.jpg");
+  if (!textureBG.loadFromFile(nameBGtexture)){std::cout << "Error loading file: Background" << std::endl;}
+  // sprite definition & load
+  spriteBG.setTexture(textureBG);
+  return spriteBG;
 }
 
 void testSFML(){
@@ -61,10 +75,7 @@ debug();
        // texture definition & load
        sf::Texture textureFond;
        string nomTextureFond("sprites/fond.jpg");
-       if (!textureFond.loadFromFile(nomTextureFond))
-       {
-               // error...
-       }
+       if (!textureFond.loadFromFile(nomTextureFond)){std::cout << "Error loading file: Fond" << std::endl;}
        // sprite definition & load
        sf::Sprite spriteFond;
        spriteFond.setTexture(textureFond);
@@ -76,7 +87,7 @@ debug();
        if (!textureHero.loadFromFile(nomTextureHero)){std::cout << "Error loading file: Hero." << std::endl;}
        textureHero.setSmooth(true);
        sf::Sprite spriteHero;
-       spriteHero.setPosition(sf::Vector2f((1920-128)/2, (1200-128)/2)); // absolute position
+       spriteHero.setPosition(sf::Vector2f((1920-128)/2, (1080-128)/2)); // absolute position
        spriteHero.setTexture(textureHero);
 
 

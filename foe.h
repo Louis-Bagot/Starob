@@ -33,7 +33,9 @@ private:
   // console display
   char m_char; // console display
   // SFML
-  std::string m_image; // sprite
+  std::string m_image;
+  sf::Sprite m_sprite;
+  sf::Texture m_texture;
 
   position randomFoePos(); // generator of initial random position (for Constructor)
 
@@ -45,10 +47,14 @@ public:
   // gets
   int getAttack() const;
   int getSpeed() const;
-  std::string getImage() const;
   position getPos() const;
   char getChar() const;
-  void getState();
+  std::string getImage() const;
+  sf::Texture getTexture()const;
+  sf::Sprite getSprite()const;
+
+
+  void getState() const; // current foe state
 
   // Foe routine:
   void advance(); // move one iteration. BEFORE first collision test !

@@ -11,9 +11,9 @@ Hero::Hero() {
   // position & directions
   m_pos.x=FX/2;
   m_pos.y=FY/2;
-  m_spritesize=1;
+  m_spritesize=128;
   m_posShield.x=m_pos.x;
-  m_posShield.y=m_pos.y+m_spritesize;
+  m_posShield.y=m_pos.y+1+m_spritesize;
   m_dirShield=RIGHT;
   m_limit=1;
   // console display
@@ -21,6 +21,11 @@ Hero::Hero() {
   m_charShield=')';
   // SFML
   m_image="sprites/starob.png";
+  if (!m_texture.loadFromFile(m_image)){std::cout << "Error loading file: Hero." << std::endl;}
+  m_texture.setSmooth(true);
+  sf::Sprite m_sprite;
+  m_sprite.setPosition(sf::Vector2f((FY)/2, (FX)/2)); // absolute position
+  m_sprite.setTexture(m_texture);
 
 }
 
@@ -38,6 +43,7 @@ char Hero::getChar() const {return m_char;}
 char Hero::getCharShield() const {return m_charShield;}
 int Hero::getLimit() const {return m_limit;}
 string Hero::getImage() const {return m_image;}
+sf::Sprite Hero::getSprite() const {return m_sprite;}
 int Hero::getSpriteSize() const {return m_spritesize;}
 
 // hero handling
@@ -57,23 +63,23 @@ void Hero::manageShield() {
   m_dirShield=Hero::getLUDR(); // LEFT UP DOWN RIGHT arrows
   switch (m_dirShield) {
     case UP:
-      m_posShield.x=m_pos.x-m_spritesize;
+      m_posShield.x=m_pos.x-1-m_spritesize;
       m_posShield.y=m_pos.y;
       m_charShield='_';
       break;
     case DOWN:
-      m_posShield.x=m_pos.x+m_spritesize;
+      m_posShield.x=m_pos.x+1+m_spritesize;
       m_posShield.y=m_pos.y;
       m_charShield='-';
       break;
     case RIGHT:
       m_posShield.x=m_pos.x;
-      m_posShield.y=m_pos.y+m_spritesize;
+      m_posShield.y=m_pos.y+1+m_spritesize;
       m_charShield=')';
       break;
     case LEFT:
       m_posShield.x=m_pos.x;
-      m_posShield.y=m_pos.y-m_spritesize;
+      m_posShield.y=m_pos.y-1-m_spritesize;
       m_charShield='(';
       break;
   }

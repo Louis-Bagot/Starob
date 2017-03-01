@@ -7,6 +7,7 @@
 #include <time.h>
 #include <string>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Graphics.hpp>
 #include "fundations.h"
 
 // Hero class
@@ -27,6 +28,9 @@ private:
           // If it must be done rectangular, create "position m_sizesprite",
           // and put .x .y everywhere needed.
   std::string m_image;
+  sf::Sprite m_sprite;
+  sf::Texture m_texture;
+
   int m_spritesize;
 
 
@@ -44,6 +48,7 @@ public:
   char getCharShield() const;
   int getLimit() const;
   std::string getImage() const;
+  sf::Sprite getSprite() const;
   int getSpriteSize() const;
 
 

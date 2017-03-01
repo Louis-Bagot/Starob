@@ -19,6 +19,8 @@ void initField(char field[FX][FY]);
 void updateField(char field[FX][FY], const Hero &perso, const std::vector<Foe*> &vFoe);
 void displayFieldConsole(const char field[FX][FY]);
 void displayLife(const Hero &perso);
+void debug();
+sf::Sprite sBackground();
 void testSFML();
 
 /// Keyboard entries
