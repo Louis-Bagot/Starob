@@ -93,10 +93,18 @@ sf::Sprite Foe::getSprite() const {return m_sprite;}
 
 void Foe::advance(){
 
-  if (abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x)-m_slope)<abs((m_origin.y-m_pos.y)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)) {
-    m_pos.y+=m_delta.y*m_speed;
-  } else
+  if (abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x)-m_slope)<
+      abs((m_origin.y-m_pos.y)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)) {
+    if (abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x)-m_slope)<
+        abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)) {
+      m_pos.y+=m_delta.y*m_speed;
+      m_pos.x+=m_delta.x*m_speed;
+    } else m_pos.y+=m_delta.y*m_speed;
+  } else if (abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)<
+              abs((m_origin.y-m_pos.y)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)) {
     m_pos.x+=m_delta.x*m_speed;
+    m_pos.y+=m_delta.y*m_speed;
+  } else m_pos.x+=m_delta.x*m_speed;
 
 }
 

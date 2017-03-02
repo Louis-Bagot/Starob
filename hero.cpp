@@ -97,29 +97,23 @@ void Hero::manageShield() {
 }
 
 void Hero::manageMovement(){
-  direction dir;
   position saveP=m_pos;
   position saveS=m_posShield;
-  dir=Hero::getQZSD(); // Q: left; Z: up; S: down; D: right;
 
-  switch (dir) {
-    case UP:
-      m_pos.x-=m_speed;
-      m_posShield.x-=m_speed;
-      break;
-    case DOWN:
-      m_pos.x+=m_speed;
-      m_posShield.x+=m_speed;
-      break;
-    case RIGHT:
-      m_pos.y+=m_speed;
-      m_posShield.y+=m_speed;
-      break;
-    case LEFT:
-      m_pos.y-=m_speed;
-      m_posShield.y-=m_speed;
-      break;
-  }
+  if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) || (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) || (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) || (sf::Keyboard::isKeyPressed(sf::Keyboard::D))) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)){
+          m_pos.x-=m_speed;
+          m_posShield.x-=m_speed;}
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+          m_pos.x+=m_speed;
+          m_posShield.x+=m_speed;}
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+          m_pos.y-=m_speed;
+          m_posShield.y-=m_speed;}
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+          m_pos.y+=m_speed;
+          m_posShield.y+=m_speed;}
+          }
 
   if (!validPos(m_pos)) {
     m_pos=saveP;
@@ -135,22 +129,6 @@ void Hero::updateSprite(){
 
 bool Hero::dead() {
   return (m_life==0);
-}
-
-
-direction Hero::getQZSD(){
-  direction dir;
-  if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) || (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) || (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) || (sf::Keyboard::isKeyPressed(sf::Keyboard::D))) {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-            dir = UP;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            dir = DOWN;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-            dir = LEFT;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-            dir = RIGHT;
-          }
-return dir;
 }
 
 direction Hero::getLUDR(){

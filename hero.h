@@ -65,7 +65,6 @@ public:
 
 
   // statics
-  static direction getQZSD();
   static direction getLUDR();
   static void manageHero(Hero &perso);
 
