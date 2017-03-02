@@ -11,18 +11,13 @@
 #include "hero.h"
 #include "foe.h"
 
-
 // library for game Starob: Man-Machine Interface
 
-/// Field handling
-void initField(char field[FX][FY]);
-void updateField(char field[FX][FY], const Hero &perso, const std::vector<Foe*> &vFoe);
-void displayFieldConsole(const char field[FX][FY]);
-void displayLife(const Hero &perso);
-void testSFML();
-
-/// Keyboard entries
+// SFML: keyboard & background
 bool abortGame();
+void debug();
+sf::Sprite loadBG(sf::Texture &textureBG);
+
 
 
 #endif //MMI_DEFINE

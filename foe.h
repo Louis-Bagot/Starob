@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 #include "fundations.h"
 #include "hero.h"
 
@@ -20,22 +21,22 @@ private:
   int m_speed;
   // position
   position m_pos; // position
+  int m_hitbox; // size of the ROUND hitbox in pixels.
   // variables for "advance"
   position m_origin; // origin position
   position m_delta; // handle whether x and y should go right or left
   float m_slope; // slope of the line foe will follow
   // pop variable(s)
-  static const int constantPop; // number of loops after which Foes pop constantly
-  static const float foesPerLoop; // number of loops after which Foes pop constantly
 
-  static int counter; // nb of Foes created so far
   int m_number; // n° of creation
   // console display
   char m_char; // console display
   // SFML
-  std::string m_image; // sprite
+  sf::Sprite m_sprite;
+  int m_spritesize;
+  int m_tilt; // angle for the sprite
 
-  position randomFoePos(); // generator of initial random position (for Constructor)
+  position randomFoePos(const Hero &perso); // generator of initial random position (for Constructor)
 
 public:
   // Constructor(s), Destructor
@@ -45,18 +46,29 @@ public:
   // gets
   int getAttack() const;
   int getSpeed() const;
-  std::string getImage() const;
   position getPos() const;
-  char getChar() const;
-  void getState();
+  std::string getImage() const;
+  sf::Texture getTexture()const;
+  sf::Sprite getSprite()const;
 
   // Foe routine:
   void advance(); // move one iteration. BEFORE first collision test !
+  void updateSprite(); // moves sprite where pos is
   int collision(Hero &perso); // return options: 0: not; 1: border; 2: shield; 3: perso
+
+
+  // static attributes and functions
+  static const int constantPop; // number of loops after which Foes pop constantly
+  static const float foesPerLoop; // number of loops after which Foes pop constantly
+  static const std::string m_image;
+  static sf::Texture m_texture; // cst SFML texture
+  static const int m_texturesize;
+  static int counter; // nb of Foes created so far
 
   static int manage1Foe(Foe &opp,Hero &perso);
   static bool generator(const int &loop); // returns true if a foe must be summoned
-  static void manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe);
+  static void manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe, sf::RenderWindow &window);
+  static void loadText(sf::Texture &texture, const std::string &str);
 };
 
 

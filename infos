@@ -1,14 +1,31 @@
-size of board 13*75 for console display
+× Console display: design of hero&shield: @).
 
-  Console design of hero, shield:
+× SFML display: IMPORTANT
+	- Hitboxes will be ROUND. The position of each object (respectively Heroes and Foes)
+	  will be at the CENTER of their sprite.
+		Everything will be designed and coded under this assumption.
+	- I'll assume until new choice that the shield hitbox is the same size as the Hero's
+	- Foe sprites and hitboxes are LESSER OR EQUAL Hero's. will drive popping.
+	- all this means:
+		. object position is at center of actual sprite position
+		. WARNING X AND Y AXIS INVERTED IN SPRITE DISPLAYING. (fuck.)
 
-	Positions L & R:
 
-	         (@   @)
-
-	Positions U & D:
-
-		  ⁀   @
-		  @   ‿ 
-
-
+	=> Things to do:
+		- define distance /CHECK
+		- adapt every freaking bit of code to this assumption in any Hero and Foe code
+			this englobes:
+				- constructors. careful with sprite positions. /TOBE
+				- Hero:
+					. position: nothing should be to change here. careful again, sprite position
+					. shield position: on circle formed by Hero hitbox OR spritesize ? /CHECK
+					 	= to decide; for now hitbox=spritesize.
+					. valid position: border +/- (3/2)*spritesize /CHECK
+					. create hitbox attribute /CHECK
+					. SPRITE POSITION UPDATE
+				-	Foe:
+					. position: nothing to change? - POPPING position: will depend on hero sprite size
+					. collisions: distance between both centers is <= sum of hitboxes. check Shield first ! /CHECK
+					. hence also create hitbox attribute /CHECK
+					. SPRITE POSITION UPDATE
+		- handle display.

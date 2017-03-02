@@ -7,6 +7,7 @@
 #include <time.h>
 #include <string>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Graphics.hpp>
 #include "fundations.h"
 
 // Hero class
@@ -19,15 +20,19 @@ private:
   position m_pos;
   position m_posShield;
   direction m_dirShield;
+  int m_hitbox; // radius of the ROUND hitbox in pixels.
   int m_limit; // minimum distance to the border of the field
   // console display
   char m_char;
   char m_charShield;
-  // SFML // !!! We assumed so far that the sprite is a square.
-          // If it must be done rectangular, create "position m_sizesprite",
-          // and put .x .y everywhere needed.
+  // SFML
   std::string m_image;
+  sf::Texture m_texture;
+  int m_texturesize;
+  sf::Sprite m_spriteHero;
+  sf::Sprite m_spriteShield;
   int m_spritesize;
+
 
 
 public:
@@ -40,10 +45,11 @@ public:
   int getSpeed() const;
   position getPosShield() const;
   position getPos() const;
-  char getChar() const;
-  char getCharShield() const;
+  int getHitbox() const;
   int getLimit() const;
   std::string getImage() const;
+  sf::Sprite getSpriteHero() const;
+    sf::Sprite getSpriteShield() const;
   int getSpriteSize() const;
 
 
@@ -52,12 +58,13 @@ public:
   void takeDamage(const int damage);
   void manageShield();
   void manageMovement();
+  void updateSprite();
   bool dead();
 
 
   // statics
-  static direction getQZSD();
   static direction getLUDR();
+  static void manageHero(Hero &perso);
 
 };
 
