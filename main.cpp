@@ -18,28 +18,21 @@ int main () {
   srand(time(NULL));
   sf::Clock clock;
   sf::Time elapsed = clock.restart();
+  int millisec(20); // loop slow factor
 
 //: window definition, SFML initializations
 debug(); // Somehow gets sprite display to work
 sf::RenderWindow window(sf::VideoMode(1920, 1080), "Starob");
 window.setFramerateLimit(60);
 sf::Event event;
-sf::Sprite spriteBG;
-//spriteBG=sBackground();
 sf::Texture textureBG;
-string nameBGtexture("sprites/background.jpg");
-if (!textureBG.loadFromFile(nameBGtexture)){std::cout << "Error loading file: Background" << std::endl;}
-// sprite definition & load
-spriteBG.setTexture(textureBG);
-spriteBG.setScale(sf::Vector2f(1.f, FX/1200.f)); // absolute scale factor
+sf::Sprite spriteBG(loadBG(textureBG));
 
 
 
 //: Main variables.
   int loop(0);         // number of loops (for Foe generation)
   bool end;            // take info about escaping the main
-  char field[FX][FY];  // char field where the fight unfolds
-  initField(field);    // and its initialization
 
   // Objects, variables concerning classes
   Hero arob;
@@ -51,61 +44,46 @@ spriteBG.setScale(sf::Vector2f(1.f, FX/1200.f)); // absolute scale factor
 
 
 
-// main loop
-/// Window loop
-  while (window.isOpen()){
- /// Fight loop
-    do {
+// ----------- main loop -------------///
 
-      elapsed = clock.restart(); // time management
-      loop++;
+  while (window.isOpen()){ /// Window loop
+    do { /// Fight loop
 
+      // --- begin time management --- //
+     elapsed = clock.restart();
+     loop++;
 
-   /// update information
-    //  try{ updateField(field, arob, vFoe);}
-    //  catch (std::exception e) {std::cout << e.what() << std::endl;}
-
-    //  displayFieldConsole(field);
-    // displayLife(arob);
-    //  std::cout << "loop:" << loop << std::endl;
-
-
+     // --- window --- //
      window.clear(sf::Color::Black);
      window.draw(spriteBG);
 
-     /// Hero & Foes management
-       Hero::manageHero(arob);
-       try{ Foe::manageFoes(arob, loop, vFoe, window);
-       }  catch (std::exception e) {std::cout << e.what() << std::endl;}
+     // --- objects management --- //
+     Hero::manageHero(arob);
+     try{ Foe::manageFoes(arob, loop, vFoe, window); // display - warning exception!
+     }  catch (std::exception e) {std::cout << e.what() << std::endl;}
 
+    // --- Display --- //
      window.draw(arob.getSpriteShield());
      window.draw(arob.getSpriteHero());
      window.display();
 
 
+     // --- end time management --- //
      elapsed=clock.getElapsedTime();
-     if (clock.getElapsedTime().asMilliseconds()<30)
-     usleep(30000-elapsed.asMilliseconds());
+     if (clock.getElapsedTime().asMilliseconds()<millisec)
+     usleep(millisec*1000-elapsed.asMilliseconds());
 
-    /// Miscellaneous closing conditions
+    // --- Miscellaneous closing conditions --- //
      end=abortGame();
-     std::cout << "end inloop: " << end << std::endl;
      while (window.pollEvent(event))
      {
        if (event.type == sf::Event::Closed){
          end=true;
-         std::cout << "pollEvent" << std::endl;
        }
      }
-
    } while(!arob.dead()&&(!end));
-   std::cout << "end before close: " << end << std::endl;
-   window.close(); // if we got out by regular end of game
+  window.close(); // if we got out by regular end of game
   }
-
-  // testSFML();
-std::cout << "end:" << end << std::endl;
-std::cout << "dead:" << arob.dead() << std::endl;
 
 return 0;
 }

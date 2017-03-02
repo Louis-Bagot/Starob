@@ -7,7 +7,7 @@ using namespace std;
 Hero::Hero() {
   // stats
   m_life=10;
-  m_speed=3;
+  m_speed=12;
   // position & directions
   m_pos.x=FX/2;
   m_pos.y=FY/2;
@@ -15,12 +15,9 @@ Hero::Hero() {
   m_spritesize=128;
   m_hitbox=m_spritesize/2;
   m_posShield.x=m_pos.x;
-  m_posShield.y=m_pos.y+1+m_spritesize;
+  m_posShield.y=m_pos.y+1+m_spritesize/2;
   m_dirShield=RIGHT;
   m_limit=1.5*m_spritesize; // 3/2 is for 1 full unaccessible + 0.5 for dist center-spriteborder
-  // console display
-  m_char='@';
-  m_charShield=')';
   // SFML
   m_image="sprites/starob.png";
   if (!m_texture.loadFromFile(m_image)){std::cout << "Error loading file: Hero." << std::endl;}
@@ -38,9 +35,7 @@ Hero::Hero() {
 
 }
 
-Hero::~Hero(){
-  cout << "Hero destructed" << endl;
-}
+Hero::~Hero(){cout << "Hero destructed" << endl;}
 
 /// Functions
 // gets
@@ -48,8 +43,6 @@ int Hero::getLife() const {return m_life;}
 int Hero::getSpeed() const {return m_speed;}
 position Hero::getPos() const {return m_pos;}
 position Hero::getPosShield() const {return m_posShield;}
-char Hero::getChar() const {return m_char;}
-char Hero::getCharShield() const {return m_charShield;}
 int Hero::getLimit() const {return m_limit;}
 int Hero::getHitbox() const {return m_hitbox;}
 string Hero::getImage() const {return m_image;}
@@ -71,29 +64,28 @@ void Hero::takeDamage(const int damage){
 }
 
 void Hero::manageShield() {
+
   m_dirShield=Hero::getLUDR(); // LEFT UP DOWN RIGHT arrows
   switch (m_dirShield) {
     case UP:
       m_posShield.x=m_pos.x-1-m_spritesize/2;
       m_posShield.y=m_pos.y;
-      m_charShield='_';
       break;
     case DOWN:
       m_posShield.x=m_pos.x+1+m_spritesize/2;
       m_posShield.y=m_pos.y;
-      m_charShield='-';
       break;
     case RIGHT:
       m_posShield.x=m_pos.x;
       m_posShield.y=m_pos.y+1+m_spritesize/2;
-      m_charShield=')';
       break;
     case LEFT:
       m_posShield.x=m_pos.x;
       m_posShield.y=m_pos.y-1-m_spritesize/2;
-      m_charShield='(';
       break;
   }
+
+
 }
 
 void Hero::manageMovement(){
@@ -119,7 +111,6 @@ void Hero::manageMovement(){
     m_pos=saveP;
     m_posShield=saveS;
   }
-
 }
 
 void Hero::updateSprite(){
@@ -145,6 +136,7 @@ direction Hero::getLUDR(){
           }
 return dir;
 }
+
 
 
 void Hero::manageHero(Hero &perso) {

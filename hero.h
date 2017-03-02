@@ -45,8 +45,6 @@ public:
   int getSpeed() const;
   position getPosShield() const;
   position getPos() const;
-  char getChar() const;
-  char getCharShield() const;
   int getHitbox() const;
   int getLimit() const;
   std::string getImage() const;

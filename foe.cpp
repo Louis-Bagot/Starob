@@ -2,12 +2,14 @@
 
 using namespace std;
 
-/// variables for all Foes
+/// variables for all Foes, load function
 const int Foe::constantPop=100; // Foes will pop constantly after that much loops
-const float Foe::foesPerLoop=1/1.; /// 1/Number of foe popping per loop
-int Foe::counter=0;
+const float Foe::foesPerLoop=1/5.; /// 1/Number of foe popping per loop
 const std::string Foe::m_image="sprites/foe.png";
 sf::Texture Foe::m_texture;
+const int Foe::m_texturesize=512;
+int Foe::counter=0;
+
 void Foe::loadText(sf::Texture &texture, const std::string &str){
   texture.loadFromFile(str);
   texture.setSmooth(true);
@@ -42,17 +44,16 @@ position Foe::randomFoePos(const Hero &perso){ //initial random position generat
     randPos.y=rand()%(FY-perso.getSpriteSize())+perso.getSpriteSize()/2;
 
   return randPos;
-
 }
 
 
 // Constructor using m_target based on Hero position
 Foe::Foe(const Hero &perso) {
   m_attack=1;
-  m_speed=10;
+  m_speed=perso.getSpeed()*2;
   m_spritesize=128;
-  m_hitbox=m_spritesize/2;
-  m_pos=randomFoePos(perso); // first initialalization of m_tilt too
+  m_hitbox=5;
+  m_pos=randomFoePos(perso);
   m_origin=m_pos;
 
   // "advance" variables
@@ -72,22 +73,31 @@ Foe::Foe(const Hero &perso) {
 
   m_number=counter;
   // SFML
-  m_char='o';
   m_sprite.setTexture(Foe::m_texture);
   m_sprite.setPosition(sf::Vector2f(m_pos.y-(m_spritesize/2), m_pos.x-(m_spritesize/2))); // absolute position
+  m_sprite.setScale(sf::Vector2f((m_spritesize/(float)Foe::m_texturesize), (m_spritesize/(float)Foe::m_texturesize))); // times 2: Hero+Shield
 
 
+  // sprite tilt management. 180/pi ~= 57.2958
+  if ((m_delta.x>=0)&&(m_delta.y>=0)) {
+    m_tilt=57.2958*atan(m_slope);
+  } else if ((m_delta.x>=0)&&(m_delta.y>=0)) {
+    m_tilt=180-57.2958*atan(m_slope);
+  } else if ((m_delta.x>=0)&&(m_delta.y>=0)) {
+    m_tilt=360-57.2958*atan(m_slope);
+  } else {
+    m_tilt=180+57.2958*atan(m_slope);
+  }
 
-
-
-
+//  m_sprite.setRotation(m_tilt); // absolute angle
 }
+
+
 Foe::~Foe(){}
 
 int Foe::getAttack()const { return m_attack;}
 int Foe::getSpeed()const { return m_speed;}
 position Foe::getPos() const{return m_pos;}
-char Foe::getChar() const{return m_char;}
 std::string Foe::getImage() const{return m_image;}
 sf::Sprite Foe::getSprite() const {return m_sprite;}
 
@@ -177,10 +187,4 @@ void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe, sf::RenderW
     } while(del);
   window.draw(vFoe[i]->getSprite());
   }
-}
-
-void Foe::getState() const{
-  std::cout << "Origin (" << m_origin.x <<","<< m_origin.y<<"), ";
-  std::cout << "Position (" << m_pos.x <<","<< m_pos.y<<"), ";
-  std::cout << "Pop number: " << m_number << ", " ;
 }

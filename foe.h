@@ -32,7 +32,6 @@ private:
   // console display
   char m_char; // console display
   // SFML
-  int m_texturesize;
   sf::Sprite m_sprite;
   int m_spritesize;
   int m_tilt; // angle for the sprite
@@ -48,13 +47,9 @@ public:
   int getAttack() const;
   int getSpeed() const;
   position getPos() const;
-  char getChar() const;
   std::string getImage() const;
   sf::Texture getTexture()const;
   sf::Sprite getSprite()const;
-
-
-  void getState() const; // current foe state
 
   // Foe routine:
   void advance(); // move one iteration. BEFORE first collision test !
@@ -67,6 +62,7 @@ public:
   static const float foesPerLoop; // number of loops after which Foes pop constantly
   static const std::string m_image;
   static sf::Texture m_texture; // cst SFML texture
+  static const int m_texturesize;
   static int counter; // nb of Foes created so far
 
   static int manage1Foe(Foe &opp,Hero &perso);
