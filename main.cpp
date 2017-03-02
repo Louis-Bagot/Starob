@@ -18,7 +18,7 @@ int main () {
   srand(time(NULL));
   sf::Clock clock;
   sf::Time elapsed = clock.restart();
-  int millisec(20); // loop slow factor
+  int millisec(1); // loop slow factor
 
 //: window definition, SFML initializations
 debug(); // Somehow gets sprite display to work

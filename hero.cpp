@@ -7,7 +7,7 @@ using namespace std;
 Hero::Hero() {
   // stats
   m_life=10;
-  m_speed=12;
+  m_speed=3;
   // position & directions
   m_pos.x=FX/2;
   m_pos.y=FY/2;
@@ -64,7 +64,7 @@ void Hero::takeDamage(const int damage){
 }
 
 void Hero::manageShield() {
-
+/* Shield with keyboard
   m_dirShield=Hero::getLUDR(); // LEFT UP DOWN RIGHT arrows
   switch (m_dirShield) {
     case UP:
@@ -84,7 +84,15 @@ void Hero::manageShield() {
       m_posShield.y=m_pos.y-1-m_spritesize/2;
       break;
   }
+*/ // Shield with mouse:
 
+sf::Vector2i vMouse = sf::Mouse::getPosition(); // !warning - desktop coordinates are (Y, X)
+position mousepos;
+mousepos.x=vMouse.y;
+mousepos.y=vMouse.x;
+float distance(m_pos-mousepos);
+m_posShield.x=m_pos.x-(m_spritesize/2)*(m_pos.x-mousepos.x)/distance;
+m_posShield.y=m_pos.y-(m_spritesize/2)*(m_pos.y-mousepos.y)/distance;
 
 }
 
