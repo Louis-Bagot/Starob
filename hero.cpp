@@ -7,7 +7,7 @@ using namespace std;
 Hero::Hero() {
   // stats
   m_life=10;
-  m_speed=3;
+  m_speed=10;
   // position & directions
   m_pos.x=FX/2;
   m_pos.y=FY/2;
