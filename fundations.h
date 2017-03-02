@@ -3,7 +3,7 @@
 #ifndef FUNDATIONS_DEFINE
 #define FUNDATIONS_DEFINE
 //#include <iostream>
-#include <cmath>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -22,5 +22,6 @@ typedef struct position {
 enum direction {RIGHT,LEFT,UP,DOWN};
 
 bool operator==(const position &pos1, const position &pos2);
+float operator-(const position &pos1, const position &pos2); // Substraction is distance.
 
 #endif //FUNDATIONS_DEFINE

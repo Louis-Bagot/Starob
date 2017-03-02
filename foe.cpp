@@ -1,33 +1,45 @@
 #include "foe.h"
 
 using namespace std;
+
+/// variables for all Foes
 const int Foe::constantPop=100; // Foes will pop constantly after that much loops
 const float Foe::foesPerLoop=1/1.; /// 1/Number of foe popping per loop
 int Foe::counter=0;
+const std::string Foe::m_image="sprites/foe.png";
+sf::Texture Foe::m_texture;
+void Foe::loadText(sf::Texture &texture, const std::string &str){
+  texture.loadFromFile(str);
+  texture.setSmooth(true);
+}
 
-position Foe::randomFoePos(){ //initial random position generator (for Constructor)
+//if (!Foe::m_texture.loadFromFile(Foe::m_image)){std::cout << "Error loading file: Foe." << std::endl;}
+
+/// Foe functions
+
+position Foe::randomFoePos(const Hero &perso){ //initial random position generator (for Constructor)
   position randPos; // pop to return
   int redge(rand()%4); // random edge to pop to
   // pairing edges with integers: let 0:UP, 1:DOWN; 2:LEFT, 3:RIGHT
 
   switch (redge) {
     case 0:
-      randPos.x=0;
+      randPos.x=perso.getSpriteSize()/2;
       break;
     case 1:
-      randPos.x=FX-1;
+      randPos.x=FX-1-perso.getSpriteSize()/2;
       break;
     case 2:
-      randPos.y=0;
+      randPos.y=perso.getSpriteSize()/2;
       break;
     case 3:
-      randPos.y=FY-1;
+      randPos.y=FY-1-perso.getSpriteSize()/2;
       break;
   }
   if (redge>1) // we are either L or R, need an x
-    randPos.x=rand()%FX;
+    randPos.x=rand()%(FX-perso.getSpriteSize())+perso.getSpriteSize()/2; //pop somwhere on rect
   else
-    randPos.y=rand()%FY;
+    randPos.y=rand()%(FY-perso.getSpriteSize())+perso.getSpriteSize()/2;
 
   return randPos;
 
@@ -37,15 +49,17 @@ position Foe::randomFoePos(){ //initial random position generator (for Construct
 // Constructor using m_target based on Hero position
 Foe::Foe(const Hero &perso) {
   m_attack=1;
-  m_speed=1;
-  m_pos=randomFoePos(); // initialalizes m_edge too
+  m_speed=10;
+  m_spritesize=128;
+  m_hitbox=m_spritesize/2;
+  m_pos=randomFoePos(perso); // first initialalization of m_tilt too
   m_origin=m_pos;
 
   // "advance" variables
   if (perso.getPos().x==m_pos.x) { // handling extreme vertical line case
     if (m_pos.x==FX-1-perso.getLimit()) {
-      m_pos.x-=m_speed;
-    } else m_pos.x+=m_speed;
+      m_pos.x-=1;
+    } else m_pos.x+=1;
   }
   // deltas
   if (perso.getPos().x>=m_pos.x) m_delta.x=1;
@@ -59,7 +73,14 @@ Foe::Foe(const Hero &perso) {
   m_number=counter;
   // SFML
   m_char='o';
-  m_image="foe.jpg";
+  m_sprite.setTexture(Foe::m_texture);
+  m_sprite.setPosition(sf::Vector2f(m_pos.y-(m_spritesize/2), m_pos.x-(m_spritesize/2))); // absolute position
+
+
+
+
+
+
 }
 Foe::~Foe(){}
 
@@ -76,6 +97,11 @@ void Foe::advance(){
     m_pos.y+=m_delta.y*m_speed;
   } else
     m_pos.x+=m_delta.x*m_speed;
+
+}
+
+void Foe::updateSprite(){
+  m_sprite.setPosition(sf::Vector2f(m_pos.y-m_spritesize/2, m_pos.x-m_spritesize/2));
 }
 
 int Foe::collision(Hero &perso){
@@ -83,10 +109,12 @@ int Foe::collision(Hero &perso){
 
   if ((m_pos.x>=FX)||(m_pos.x<=-1)||(m_pos.y>=FY)||(m_pos.y<=-1)) // if we get out of field
     hit=1;
-  else if (m_pos==perso.getPosShield()) {
+  else {
+    if (m_pos-perso.getPosShield()<m_hitbox+perso.getHitbox()) // we want to cover the shield+hero case so no ifelse
     hit=2;
-  } else if (m_pos==perso.getPos()) {
+    if (m_pos-perso.getPos()<m_hitbox+perso.getHitbox()) // advantage to hero hit
     hit=3;
+
   }
   return hit;
 }
@@ -94,6 +122,7 @@ int Foe::collision(Hero &perso){
 int Foe::manage1Foe(Foe &opp, Hero &perso){
   int hit;
   opp.advance(); // execute movement
+  opp.updateSprite();
   hit=opp.collision(perso); // check consequences
   if (hit==3) {
     perso.takeDamage(opp.getAttack());
@@ -116,7 +145,7 @@ bool Foe::generator(const int &loop){
 }
 */
 
-void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe) {
+void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe, sf::RenderWindow &window) {
   bool del=false; // will check if you have deleted the current explored foe
 
   // generation of foes
@@ -138,6 +167,7 @@ void Foe::manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe) {
         vFoe.pop_back();
       }
     } while(del);
+  window.draw(vFoe[i]->getSprite());
   }
 }
 

@@ -40,6 +40,7 @@ void displayLife(const Hero &perso){
 }
 
 bool abortGame(){
+  std::cout << "abort: escape: " << (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) << " space: " << (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) << std::endl;
   return ((sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))||(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)));
 }
 
