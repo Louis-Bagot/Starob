@@ -29,3 +29,17 @@ sf::Sprite loadBG(sf::Texture &textureBG){
   spriteBG.setScale(sf::Vector2f(1.f, FX/1200.f)); // absolute scale factor
   return spriteBG;
 }
+
+sf::Sprite loadLife(sf::Texture &textureLife, const Hero &perso, const int &sizelife){
+  sf::Sprite spriteLife;
+  int dist=16;
+  textureLife.setRepeated(true);
+  string nameLifeTexture("sprites/life.png");
+  if (!textureLife.loadFromFile(nameLifeTexture)){std::cout << "Error loading file: Life" << std::endl;}
+  // sprite definition & load
+  spriteLife.setTextureRect(sf::IntRect(0, 0, sizelife*perso.getLife(), sizelife));
+  spriteLife.setTexture(textureLife);
+  //spriteLife.setPosition(sf::Vector2f(FY-dist*sizelife, FX-dist*sizelife));
+  spriteLife.setPosition(sf::Vector2f(dist, dist));
+  return spriteLife;
+}

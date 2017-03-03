@@ -6,7 +6,7 @@ using namespace std;
 /// Constructor, Destructor
 Hero::Hero() {
   // stats
-  m_life=10;
+  m_life=10; // (<= 59 for display's sake)
   m_speed=6;
   // position & directions
   m_pos.x=FX/2;
