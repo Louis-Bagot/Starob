@@ -38,6 +38,9 @@ sf::Sprite spriteBG(loadBG(textureBG));
   Hero arob;
   std::vector<Foe*> vFoe;
   Foe::loadText(Foe::m_texture, Foe::m_image);
+  sf::Texture textureLife;
+  int sizelife=32; // size of textlife
+  sf::Sprite spriteLife(loadLife(textureLife, arob, sizelife));
 
 
 
@@ -65,6 +68,8 @@ sf::Sprite spriteBG(loadBG(textureBG));
     // --- Display --- //
      window.draw(arob.getSpriteShield());
      window.draw(arob.getSpriteHero());
+     spriteLife.setTextureRect(sf::IntRect(0, 0, sizelife*arob.getLife(), sizelife));
+     window.draw(spriteLife);
      window.display();
 
 

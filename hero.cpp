@@ -6,8 +6,8 @@ using namespace std;
 /// Constructor, Destructor
 Hero::Hero() {
   // stats
-  m_life=10;
-  m_speed=3;
+  m_life=10; // (<= 59 for display's sake)
+  m_speed=6;
   // position & directions
   m_pos.x=FX/2;
   m_pos.y=FY/2;
@@ -27,12 +27,15 @@ Hero::Hero() {
   m_spriteHero.setTextureRect(sf::IntRect(0, 0, m_texturesize/2, m_texturesize/2));
   m_spriteHero.setScale(sf::Vector2f((2*m_spritesize/(float)m_texturesize), (2*m_spritesize/(float)m_texturesize))); // times 2: Hero+Shield
   m_spriteHero.setPosition(sf::Vector2f(m_pos.y-(m_spritesize/2), m_pos.x-(m_spritesize/2))); // absolute position
+
   // Shield sprite
   m_spriteShield.setTexture(m_texture);
   m_spriteShield.setScale(sf::Vector2f((2*m_spritesize/(float)m_texturesize), (2*m_spritesize/(float)m_texturesize))); // times 2: Hero+Shield
   m_spriteShield.setTextureRect(sf::IntRect(m_texturesize/2, 0, m_texturesize/2, m_texturesize/2));
   m_spriteShield.setPosition(sf::Vector2f(m_posShield.y-(m_spritesize/2), m_posShield.x-(m_spritesize/2))); // absolute position
 
+  m_touchedHero=0;
+  m_touchedShield=0;
 }
 
 Hero::~Hero(){cout << "Hero destructed" << endl;}
@@ -93,7 +96,6 @@ mousepos.y=vMouse.x;
 float distance(m_pos-mousepos);
 m_posShield.x=m_pos.x-(m_spritesize/2)*(m_pos.x-mousepos.x)/distance;
 m_posShield.y=m_pos.y-(m_spritesize/2)*(m_pos.y-mousepos.y)/distance;
-
 }
 
 void Hero::manageMovement(){
@@ -122,12 +124,27 @@ void Hero::manageMovement(){
 }
 
 void Hero::updateSprite(){
+  touchedSprites(); // handle sprite coloring depending on being touched
   m_spriteHero.setPosition(sf::Vector2f(m_pos.y-m_spritesize/2, m_pos.x-m_spritesize/2));
   m_spriteShield.setPosition(sf::Vector2f(m_posShield.y-m_spritesize/2, m_posShield.x-m_spritesize/2));
 }
 
 bool Hero::dead() {
   return (m_life==0);
+}
+
+void Hero::touchedHero(){m_touchedHero=m_touched;}
+void Hero::touchedShield(){m_touchedShield=m_touched;}
+void Hero::touchedSprites(){
+  if (m_touchedHero>0) {
+    m_spriteHero.setColor(sf::Color(255, 255-(int)((255./m_touched)*(float)m_touchedHero), 255-(int)((255./m_touched)*(float)m_touchedHero)));
+    m_touchedHero--;
+  }
+  if (m_touchedShield>0) {
+    m_spriteShield.setColor(sf::Color(255-(int)((255./m_touched)*(float)m_touchedShield), 255-(int)((255./m_touched)*(float)m_touchedShield), 255));
+    m_touchedShield--;
+  }
+
 }
 
 direction Hero::getLUDR(){

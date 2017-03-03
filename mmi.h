@@ -17,7 +17,7 @@
 bool abortGame();
 void debug();
 sf::Sprite loadBG(sf::Texture &textureBG);
-
+sf::Sprite loadLife(sf::Texture &textureLife, const Hero &perso, const int &sizelife);
 
 
 #endif //MMI_DEFINE
