@@ -32,8 +32,10 @@ private:
   sf::Sprite m_spriteHero;
   sf::Sprite m_spriteShield;
   int m_spritesize;
-
-
+  // Touched
+  const int m_touched=64; // time(loops) animation lasts
+  int m_touchedHero; // time decreasing each loop; (0: not touched)
+  int m_touchedShield;
 
 public:
   // Constructor(s), Destructor
@@ -60,6 +62,9 @@ public:
   void manageMovement();
   void updateSprite();
   bool dead();
+  void touchedHero(); // message sent by Foe
+  void touchedShield();
+  void touchedSprites(); // handles the sprites' colors each loop
 
 
   // statics

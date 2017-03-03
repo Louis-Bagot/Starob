@@ -4,7 +4,7 @@ using namespace std;
 
 /// variables for all Foes, load function
 const int Foe::constantPop=100; // Foes will pop constantly after that much loops
-const float Foe::foesPerLoop=1/5.; /// 1/Number of foe popping per loop
+const float Foe::foesPerLoop=1/15.; /// 1/Number of foe popping per loop
 const std::string Foe::m_image="sprites/foe.png";
 sf::Texture Foe::m_texture;
 const int Foe::m_texturesize=512;
@@ -50,7 +50,7 @@ position Foe::randomFoePos(const Hero &perso){ //initial random position generat
 // Constructor using m_target based on Hero position
 Foe::Foe(const Hero &perso) {
   m_attack=1;
-  m_speed=perso.getSpeed()*2;
+  m_speed=perso.getSpeed()*1.5;
   m_spritesize=128;
   m_hitbox=5;
   m_pos=randomFoePos(perso);
@@ -105,13 +105,13 @@ void Foe::advance(){
 
   if (abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x)-m_slope)<
       abs((m_origin.y-m_pos.y)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)) {
-    if (abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x)-m_slope)<
+    if (abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x)-m_slope)>
         abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)) {
       m_pos.y+=m_delta.y*m_speed;
       m_pos.x+=m_delta.x*m_speed;
-    } else m_pos.y+=m_delta.y*m_speed;
-  } else if (abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)<
-              abs((m_origin.y-m_pos.y)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)) {
+    } else  m_pos.y+=m_delta.y*m_speed;
+ } else if (abs((m_origin.y-m_pos.y-m_delta.y*m_speed)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)<
+            abs((m_origin.y-m_pos.y)/float(m_origin.x-m_pos.x-m_delta.x*m_speed)-m_slope)) {
     m_pos.x+=m_delta.x*m_speed;
     m_pos.y+=m_delta.y*m_speed;
   } else m_pos.x+=m_delta.x*m_speed;
@@ -128,11 +128,14 @@ int Foe::collision(Hero &perso){
   if ((m_pos.x>=FX)||(m_pos.x<=-1)||(m_pos.y>=FY)||(m_pos.y<=-1)) // if we get out of field
     hit=1;
   else {
-    if (m_pos-perso.getPosShield()<m_hitbox+perso.getHitbox()) // we want to cover the shield+hero case so no ifelse
-    hit=2;
-    if (m_pos-perso.getPos()<m_hitbox+perso.getHitbox()) // advantage to hero hit
-    hit=3;
-
+    if (m_pos-perso.getPosShield()<m_hitbox+perso.getHitbox()) {// we want to cover the shield+hero case so no ifelse
+      hit=2;
+      perso.touchedShield();
+    }
+    if (m_pos-perso.getPos()<m_hitbox+perso.getHitbox()) {// advantage to hero hit
+      hit=3;
+      perso.touchedHero();
+    }
   }
   return hit;
 }
