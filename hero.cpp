@@ -60,7 +60,7 @@ bool Hero::validPos(const position pos) const {
 }
 
 void Hero::takeDamage(const int damage){
-//  m_life-=damage;
+  m_life-=damage;
   if (m_life<=0) {
     m_life=0;
   }
