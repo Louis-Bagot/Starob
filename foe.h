@@ -29,12 +29,14 @@ private:
   // pop variable(s)
 
   int m_number; // n° of creation
+  int m_latency; // loop counter for delayed apparition
   // console display
   char m_char; // console display
   // SFML
   sf::Sprite m_sprite;
   int m_spritesize;
-  int m_tilt; // angle for the sprite
+  int m_tilt; // angle for the sprite // lol the day I code that
+
 
   position randomFoePos(const Hero &perso); // generator of initial random position (for Constructor)
 
@@ -55,6 +57,7 @@ public:
   void advance(); // move one iteration. BEFORE first collision test !
   void updateSprite(); // moves sprite where pos is
   int collision(Hero &perso); // return options: 0: not; 1: border; 2: shield; 3: perso
+  int manage1Foe(Hero &perso);
 
 
   // static attributes and functions
@@ -64,8 +67,8 @@ public:
   static sf::Texture m_texture; // cst SFML texture
   static const int m_texturesize;
   static int counter; // nb of Foes created so far
+  static const int animationDelay; // time for popping animation
 
-  static int manage1Foe(Foe &opp,Hero &perso);
   static bool generator(const int &loop); // returns true if a foe must be summoned
   static void manageFoes(Hero &perso, int loop, std::vector<Foe*> &vFoe, sf::RenderWindow &window);
   static void loadText(sf::Texture &texture, const std::string &str);
